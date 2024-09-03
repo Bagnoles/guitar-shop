@@ -4,5 +4,5 @@ export const AppRoutes = {
   List: '/products',
   Product: '/products/:id',
   Add: '/add',
-  Edit: '/edit'
+  Edit: '/edit/:id'
 } as const;

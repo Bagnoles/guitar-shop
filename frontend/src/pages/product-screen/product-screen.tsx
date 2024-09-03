@@ -1,44 +1,70 @@
+import { Link, useParams } from 'react-router-dom';
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
+import { useEffect } from 'react';
+import { Guitar } from '../../types/guitar.type';
+import { guitars } from '../../mocks/guitars';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import { AppRoutes } from '../../const';
 
 
 function ProductScreen():JSX.Element {
+  const { id } = useParams();
+  let guitarInfo: Guitar | undefined;
+  console.log(id);
+  console.log(guitars);
+  console.log(guitarInfo);
+
+  useEffect(() => {
+    guitarInfo = guitars.find((item) => item.id === id);
+    console.log(guitarInfo);
+  }, [id]);
+
+  if (!guitarInfo) {
+    return <NotFoundScreen />
+  }
+
+  const { name, photo, article, type, stringsCount, description } = guitarInfo as Guitar;
+
   return (
     <div className="wrapper">
       <Header />
       <main className="page-content">
         <div className="container">
-          <h1 className="page-content__title title title--bigger">Товар</h1>
+          <h1 className="page-content__title title title--bigger">{name}</h1>
           <ul className="breadcrumbs page-content__breadcrumbs">
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">Главная</a>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoutes.Main}>Главная</Link>
             </li>
-            <li className="breadcrumbs__item"><a className="link" href="./main.html">Каталог</a>
+            <li className="breadcrumbs__item"><Link className="link" to={AppRoutes.List}>Каталог</Link>
             </li>
-            <li className="breadcrumbs__item"><a className="link">Товар</a>
+            <li className="breadcrumbs__item"><a className="link">{name}</a>
             </li>
           </ul>
-          <div className="product-container"><img className="product-container__img" src="img/content/catalog-product-1.png" srcSet="img/content/catalog-product-1@2x.png 2x" width="90" height="235" alt="" />
+          <div className="product-container">
+            <img className="product-container__img" src={photo} srcSet="img/content/catalog-product-1@2x.png 2x" width="90" height="235" alt="" />
             <div className="product-container__info-wrapper">
-              <h2 className="product-container__title title title--big title--uppercase">СURT Z30 Plus</h2>
+              <h2 className="product-container__title title title--big title--uppercase">{name}</h2>
               <br />
               <br />
-              <div className="tabs"><a className="button button--medium tabs__button" href="#characteristics">Характеристики</a><a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
+              <div className="tabs">
+                <a className="button button--medium tabs__button" href="#characteristics">Характеристики</a>
+                <a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
                 <div className="tabs__content" id="characteristics">
                   <table className="tabs__table">
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Артикул:</td>
-                      <td className="tabs__value">SO754565</td>
+                      <td className="tabs__value">{article}</td>
                     </tr>
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Тип:</td>
-                      <td className="tabs__value">Электрогитара</td>
+                      <td className="tabs__value">{type}</td>
                     </tr>
                     <tr className="tabs__table-row">
                       <td className="tabs__title">Количество струн:</td>
-                      <td className="tabs__value">6 струнная</td>
+                      <td className="tabs__value">{stringsCount} струнная</td>
                     </tr>
                   </table>
-                  <p className="tabs__product-description hidden">Гитара подходит как для старта обучения, так и для домашних занятий или использования в полевых условиях, например, в походах или для проведения уличных выступлений. Доступная стоимость, качество и надежная конструкция, а также приятный внешний вид, который сделает вас звездой вечеринки.</p>
+                  <p className="tabs__product-description hidden">{description}</p>
                 </div>
               </div>
             </div>

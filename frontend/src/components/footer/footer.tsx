@@ -1,3 +1,4 @@
+import Logo from "../logo/logo";
 
 
 function Footer():JSX.Element {
@@ -5,7 +6,8 @@ function Footer():JSX.Element {
     <footer className="footer">
         <div className="container">
           <div className="footer__container">
-            <div className="footer__logo-wrapper"><a className="footer__logo logo" href="main.html"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип" /></a>
+            <div className="footer__logo-wrapper">
+              <Logo className="footer" />
               <div className="socials footer__socials">
                 <ul className="socials__list">
                   <li className="socials-item"><a className="socials__link" href="https://www.skype.com/" aria-label="Мы в skype">
