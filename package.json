@@ -22,6 +22,7 @@
         "@typescript-eslint/parser": "6.7.0",
         "eslint": "8.49.0",
         "eslint-config-htmlacademy": "9.1.1",
+        "pino-pretty": "11.2.2",
         "rimraf": "5.0.1",
         "ts-node": "10.9.2",
         "typescript": "5.4.5"
@@ -32,6 +33,10 @@
         "npm": ">=10"
     },
     "dependencies": {
+        "@typegoose/typegoose": "12.7.0",
+        "inversify": "6.0.2",
+        "mongoose": "8.6.1",
+        "pino": "9.4.0",
         "reflect-metadata": "0.2.2"
     }
 }

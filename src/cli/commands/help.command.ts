@@ -16,6 +16,10 @@ export class HelpCommand implements Command {
             Команды:
             ${CommandName.Help}:                                    # печатает этот текст
             ${CommandName.Generate} <n> <connection string>:        # заполняет базу данных (n - количество товаров, connection string — строка с параметрами для подключения к базе данных)
+
+            Пример connection string:
+            mongodb://[username]:[password]@[host]:[port]/[databaseName]?authSource=admin
+    
         `);
     }
 }
