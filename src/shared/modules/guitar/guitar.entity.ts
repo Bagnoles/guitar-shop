@@ -3,6 +3,8 @@ import { Guitar } from "../../types/guitar.type.js";
 import { GuitarTypes } from "../../types/guitar-types.enum.js";
 import { now } from "mongoose";
 
+export interface GuitarEntity extends defaultClasses.Base {}
+
 @modelOptions({
     schemaOptions: {
       collection: 'guitars',

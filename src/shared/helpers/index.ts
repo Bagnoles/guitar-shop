@@ -1,2 +1,3 @@
-export { generateRandomValue, getRandomItem, getFullServerPath } from './common.js';
+export { generateRandomValue, getRandomItem, getFullServerPath, fillDTO } from './common.js';
 export { getMongoURI } from './database.js';
+

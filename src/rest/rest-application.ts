@@ -5,6 +5,7 @@ import { Logger } from '../shared/libs/logger/index.js';
 import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI, getFullServerPath } from '../shared/helpers/index.js';
+import { Controller } from '../shared/libs/rest/controller/index.js';
 
 @injectable()
 export class RestApplication {
@@ -13,7 +14,8 @@ export class RestApplication {
     constructor (
         @inject(Component.Logger) private readonly logger: Logger,
         @inject(Component.Config) private readonly config: Config<RestSchema>,
-        @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient
+        @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
+        @inject(Component.GuitarController) private readonly guitarController: Controller,
     ) {}
 
     private initDb() {
@@ -33,9 +35,20 @@ export class RestApplication {
         this.server.listen(port);
     }
 
+    private async initControllers() {
+        this.server.use('/guitars', this.guitarController.router);
+        this.logger.info('Controller initialization completed');
+    }
+
+    private async initMiddlewares() {
+        this.server.use(express.json());
+    }
+
     public async init() {
         this.logger.info('Application initialized');
         await this.initDb();
+        await this.initMiddlewares();
+        await this.initControllers();
         await this.initServer();
         this.logger.info(`Server started on ${getFullServerPath(this.config.get('HOST'), this.config.get('PORT'))}`);
     }
