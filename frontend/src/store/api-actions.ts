@@ -26,15 +26,15 @@ export const getGuitarInfoByID = createAppAsyncThunk<Guitar, string>('guitars/ge
 );
 
 export const createGuitar = createAppAsyncThunk<Guitar, CreateGuitarDto>('guitars/createGuitar',
-  async (_arg, {extra: api}) => {
-    const {data} = await api.post<Guitar>(APIRoute.Guitars);
+  async (dto, {extra: api}) => {
+    const {data} = await api.post<Guitar>(APIRoute.Guitars, dto);
     return data;
   }
 );
 
 export const updateGuitarInfo = createAppAsyncThunk<Guitar, UpdateGuitarDto>('guitars/updateGuitarInfo',
-  async (id, {extra: api}) => {
-    const {data} = await api.patch<Guitar>(`${APIRoute.Guitars}/${id}`);
+  async (dto, {extra: api}) => {
+    const {data} = await api.patch<Guitar>(`${APIRoute.Guitars}/${dto.id}`, dto);
     return data;
   }
 );

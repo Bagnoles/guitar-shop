@@ -23,6 +23,7 @@ export type CreateGuitarDto = {
 }
 
 export type UpdateGuitarDto = {
+  id: string;
   name?: string;
   photo?: string;
   type?: GuitarTypes;

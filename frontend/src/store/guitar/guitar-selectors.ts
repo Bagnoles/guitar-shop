@@ -8,3 +8,5 @@ export const getGuitarsErrorStatus = (state: Pick<State, NameSpace.Guitar>): boo
 export const getGuitarInfo = (state: Pick<State, NameSpace.Guitar>): Guitar | null => state[NameSpace.Guitar].guitarInfo.data;
 export const getGuitarsInfoLoadingStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].guitarInfo.isLoading;
 export const getGuitarsInfoErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].guitarInfo.isError;
+export const getGuitarsCreateErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].createError;
+export const getGuitarsUpdateErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].updateError;

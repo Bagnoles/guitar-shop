@@ -13,7 +13,9 @@ type GuitarInitialStateType = {
     data: Guitar | null;
     isLoading: boolean;
     isError: boolean;
-  }
+  },
+  createError: boolean;
+  updateError: boolean;
 }
 
 const initialState: GuitarInitialStateType = {
@@ -26,7 +28,9 @@ const initialState: GuitarInitialStateType = {
     data: null,
     isLoading: false,
     isError: false
-  }
+  },
+  createError: false,
+  updateError: false
 }
 
 export const guitarSlice = createSlice({
@@ -60,28 +64,22 @@ export const guitarSlice = createSlice({
         state.guitarInfo.isError = true;
       })
       .addCase(createGuitar.pending, (state) => {
-        state.guitars.isLoading = true;
-        state.guitars.isError = false;
+        state.createError = false;
       })
       .addCase(createGuitar.fulfilled, (state, action) => {
-        state.guitars.isLoading = false;
         state.guitars.data.push(action.payload);
       })
       .addCase(createGuitar.rejected, (state) => {
-        state.guitars.isLoading = false;
-        state.guitars.isError = true;
+        state.createError = true;
       })
       .addCase(updateGuitarInfo.pending, (state) => {
-        state.guitarInfo.isLoading = true;
-        state.guitarInfo.isError = false;
+        state.updateError = false;
       })
       .addCase(updateGuitarInfo.fulfilled, (state, action) => {
-        state.guitarInfo.isLoading = false;
         state.guitarInfo.data = action.payload;
       })
       .addCase(updateGuitarInfo.rejected, (state) => {
-        state.guitarInfo.isLoading = false;
-        state.guitarInfo.isError = true;
+        state.updateError = true;
       })
       .addCase(deleteGuitar.pending, (state) => {
         state.guitars.isLoading = true;

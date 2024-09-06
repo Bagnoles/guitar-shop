@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Guitar } from "../../types/guitar.type";
 import { useAppDispatch } from "../../hooks/store-hooks";
 import { deleteGuitar } from "../../store/api-actions";
+import { editTime } from "../../utils";
 
 type GuitarCardProps = {
   info: Guitar;
@@ -23,7 +24,7 @@ function GuitarCard({info}: GuitarCardProps):JSX.Element {
         <div className="catalog-item__data-wrapper">
           <Link className="link" to={`/products/${id}`}><p className="catalog-item__data-title">{name}</p></Link>
           <br />
-          <p className="catalog-item__data-date">Дата добавления {date}</p>
+          <p className="catalog-item__data-date">Дата добавления {editTime(date)}</p>
           <p className="catalog-item__data-price">{price} ₽</p>
         </div>
       </div>
