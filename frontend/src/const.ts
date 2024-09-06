@@ -6,3 +6,12 @@ export const AppRoutes = {
   Add: '/add',
   Edit: '/edit/:id'
 } as const;
+
+export enum NameSpace {
+  Guitar = 'GUITAR',
+  User = 'USER'
+}
+
+export enum APIRoute {
+  Guitars = '/guitars'
+}

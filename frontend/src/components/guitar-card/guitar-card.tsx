@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Guitar } from "../../types/guitar.type";
-import { AppRoutes } from "../../const";
+import { useAppDispatch } from "../../hooks/store-hooks";
+import { deleteGuitar } from "../../store/api-actions";
 
 type GuitarCardProps = {
   info: Guitar;
@@ -9,8 +10,10 @@ type GuitarCardProps = {
 function GuitarCard({info}: GuitarCardProps):JSX.Element {
   const {id, name, photo, price, date } = info;
 
+  const dispatch = useAppDispatch();
+
   const handleDeleteButtonClick = () => {
-    console.log('Delete!');
+    dispatch(deleteGuitar(id));
   }
 
   return (

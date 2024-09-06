@@ -1,5 +1,6 @@
 import { inject, injectable } from 'inversify';
 import express, { Express } from 'express';
+import cors from 'cors';
 import { Component } from '../shared/types/index.js';
 import { Logger } from '../shared/libs/logger/index.js';
 import { Config, RestSchema } from '../shared/libs/config/index.js';
@@ -42,6 +43,7 @@ export class RestApplication {
 
     private async initMiddlewares() {
         this.server.use(express.json());
+        this.server.use(cors());
     }
 
     public async init() {

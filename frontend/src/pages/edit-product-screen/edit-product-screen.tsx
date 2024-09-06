@@ -1,17 +1,41 @@
-import Footer from "../../components/footer/footer";
-import Header from "../../components/header/header";
+import { Link, useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import Footer from '../../components/footer/footer';
+import Header from '../../components/header/header';
+import { useAppDispatch, useAppSelector } from '../../hooks/store-hooks';
+import { getGuitarInfoByID } from '../../store/api-actions';
+import { getGuitarInfo } from '../../store/guitar/guitar-selectors';
+import NotFoundScreen from '../not-found-screen/not-found-screen';
+import { AppRoutes } from '../../const';
 
 
 function EditProductScreen():JSX.Element {
+  const { id } = useParams();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getGuitarInfoByID(id));
+    }
+  }, [id]);
+
+  const guitarInfo = useAppSelector(getGuitarInfo);
+
+  if (!guitarInfo) {
+    return <NotFoundScreen />
+  }
+
+  const { name, photo, article, type, stringsCount, description } = guitarInfo;
+
   return (
     <div className="wrapper">
       <Header />
       <main className="page-content">
         <section className="edit-item">
           <div className="container">
-            <h1 className="edit-item__title">СURT Z30 Plus</h1>
+            <h1 className="edit-item__title">{name}</h1>
             <ul className="breadcrumbs">
-              <li className="breadcrumbs__item"><a className="link" href="./main.html">Вход</a>
+              <li className="breadcrumbs__item"><Link className="link" to={AppRoutes.Main}>Вход</Link>
               </li>
               <li className="breadcrumbs__item"><a className="link">Товары</a>
               </li>
@@ -21,7 +45,8 @@ function EditProductScreen():JSX.Element {
             <form className="edit-item__form" action="#" method="get">
               <div className="edit-item__form-left">
                 <div className="edit-item-image edit-item__form-image">
-                  <div className="edit-item-image__image-wrap"><img className="edit-item-image__image" src="img/content/add-item-1.png" srcSet="img/content/add-item-1@2x.png 2x" width="133" height="332" alt="СURT Z30 Plus" />
+                  <div className="edit-item-image__image-wrap">
+                    <img className="edit-item-image__image" src={photo} width="133" height="332" alt={name} />
                   </div>
                   <div className="edit-item-image__btn-wrap">
                     <button className="button button--small button--black-border edit-item-image__btn">Заменить

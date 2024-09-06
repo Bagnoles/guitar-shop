@@ -7,14 +7,23 @@ import FilterForm from "../../components/filter-form/filter-form";
 import SortBlock from "../../components/sort-block/sort-block";
 import GuitarsList from "../../components/guitars-list/guitars-list";
 import Pagination from "../../components/pagination/pagination";
-import { guitars } from "../../mocks/guitars";
+import { useAppSelector } from "../../hooks/store-hooks";
+import { getGuitars, getGuitarsErrorStatus, getGuitarsLoadingStatus } from "../../store/guitar/guitar-selectors";
 
 
 function ProductsListScreen():JSX.Element {
   const navigate = useNavigate();
 
+  const guitars = useAppSelector(getGuitars);
+  const isServerError = useAppSelector(getGuitarsErrorStatus);
+  const isLoading = useAppSelector(getGuitarsLoadingStatus);
+
   const handleAddButtonClick = () => {
     navigate(AppRoutes.Add);
+  }
+
+  if (isServerError) {
+    return <p>Произошла ошибка. Попробуйте еще раз.</p>
   }
 
   return (
@@ -34,7 +43,7 @@ function ProductsListScreen():JSX.Element {
               <FilterForm />
               <SortBlock />
               <div className="catalog-cards">
-                <GuitarsList data={guitars} />
+                { isLoading ? 'Идет загрузка...' : <GuitarsList data={guitars} /> }
               </div>
             </div>
             <button className="button product-list__button button--red button--big" onClick={handleAddButtonClick}>Добавить новый товар</button>

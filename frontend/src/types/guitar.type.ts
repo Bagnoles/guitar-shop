@@ -11,3 +11,23 @@ export type Guitar = {
   price: number;
   description: string;
 }
+
+export type CreateGuitarDto = {
+  name: string;
+  photo: string;
+  type: GuitarTypes;
+  article: string;
+  stringsCount: number;
+  price: number;
+  description: string;
+}
+
+export type UpdateGuitarDto = {
+  name?: string;
+  photo?: string;
+  type?: GuitarTypes;
+  article?: string;
+  stringsCount?: number;
+  price?: number;
+  description?: string;
+}

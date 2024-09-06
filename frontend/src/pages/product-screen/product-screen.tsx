@@ -2,29 +2,30 @@ import { Link, useParams } from 'react-router-dom';
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import { useEffect } from 'react';
-import { Guitar } from '../../types/guitar.type';
-import { guitars } from '../../mocks/guitars';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import { AppRoutes } from '../../const';
+import { useAppDispatch, useAppSelector } from '../../hooks/store-hooks';
+import { getGuitarInfoByID } from '../../store/api-actions';
+import { getGuitarInfo } from '../../store/guitar/guitar-selectors';
 
 
 function ProductScreen():JSX.Element {
   const { id } = useParams();
-  let guitarInfo: Guitar | undefined;
-  console.log(id);
-  console.log(guitars);
-  console.log(guitarInfo);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
-    guitarInfo = guitars.find((item) => item.id === id);
-    console.log(guitarInfo);
+    if (id) {
+      dispatch(getGuitarInfoByID(id));
+    }
   }, [id]);
+
+  const guitarInfo = useAppSelector(getGuitarInfo);
 
   if (!guitarInfo) {
     return <NotFoundScreen />
   }
 
-  const { name, photo, article, type, stringsCount, description } = guitarInfo as Guitar;
+  const { name, photo, article, type, stringsCount, description } = guitarInfo;
 
   return (
     <div className="wrapper">
