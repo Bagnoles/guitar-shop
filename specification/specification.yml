@@ -1,0 +1,311 @@
+openapi: 3.0.0
+info:
+  title: API сервер для проекта «Guitar Shop».
+  description: |-
+    * Список ресурсов и маршрутов сервера «Guitar Shop».
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: guitars
+    description: Действия с карточками товаров (гитары).
+  - name: users
+    description: Действия с пользователем.
+
+paths:
+  /guitars:
+    get:
+      tags:
+        - guitars
+      summary: Получить список всех товаров
+      description: Возвращает список всех гитар
+
+      responses:
+        "200":
+          description: Возвращает список товаров.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/guitarInList'
+                
+        "401":
+          description: Пользователь не авторизован.
+
+    post:
+      tags:
+        - guitars
+      summary: Создать новую карточку товара (гитара)
+      description: Создает новую карточку товара.
+
+      requestBody:
+        description: Информация для создания новой карточки товара (гитары)
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/guitar'
+        required: true
+
+      responses:
+        "201":
+          description: Карточка товара создана. Возвращает объект гитары.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/guitarInList'
+
+        "400":
+          description: Ошибка валидации. Данные указаны неверно.
+
+        "401":
+          description: Пользователь не авторизован.
+
+  /guitars/{guitarId}:
+    get:
+      tags:
+        - guitars
+      summary: Получение информации по карточке товара (гитара)
+      description: Возвращает детальную информацию по карточке товара (гитара)
+
+      responses:
+        "200":
+          description: Возвращает детальную информацию по карточке товара (гитара).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/guitarInList'
+                
+        "401":
+          description: Пользователь не авторизован.
+          
+        "404":
+          description: Карточка с данным ID не найдена.
+
+    patch:
+      tags:
+        - guitars
+      summary: Редактировать карточку товара
+      description: Возвращает обновленную информацию по карточке товара
+
+      requestBody:
+        description: Информация для редактирования карточки товара
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/guitar'
+        required: true
+
+      responses:
+        "201":
+          description: Карточка товара отредактирована. Возвращает обновленный объект карточки товара.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/guitarInList'
+
+        "400":
+          description: Ошибка валидации. Данные указаны неверно.
+
+        "401":
+          description: Пользователь не авторизован.
+
+        "404":
+          description: Карточка с данным ID не найдена.
+
+    delete:
+      tags:
+        - guitars
+      summary: Удалить карточку товара
+      description: Удаляет карточку товара
+
+      responses:
+        "204":
+          description: Карточка товара успешно удалена.
+
+        "401":
+          description: Пользователь не авторизован.
+
+        "404":
+          description: Карточка с данным ID не найдена.
+
+  
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя (администратора)
+      description: Возвращает информацию о созданном пользователе
+
+      requestBody:
+        description: Информация для создания нового пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUser'
+        required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Возвращает объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "400":
+          description: Ошибка валидации. Данные указаны неверно.
+
+        "409":
+          description: Пользователь с таким email уже существует.
+
+  /users/check:
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя на основании токена в заголовке
+      description: Возвращает информацию об авторизованном пользователе
+
+      responses:
+        "200":
+          description: Пользователь авторизован. Возвращает объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "401":
+          description: Пользователь не авторизован.
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Авторизует существующего пользователя на основании логина и пароля
+      description: Возвращает токен авторизации
+
+      requestBody:
+        description: Информация для авторизации пользователя
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/authUser'
+        required: true
+
+      responses:
+        "200":
+          description: Пользователь успешно авторизован. Возвращает токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/userToken'
+
+        "400":
+          description: Ошибка валидации. Пользователя с такими данными не существует.
+
+
+components:
+  schemas:
+    guitarInList:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: строка-id
+        name:
+          type: string
+          example: Наименование гитары
+        date:
+          type: string
+          example: 2024-03-15T12:48:40.284Z
+        article:
+          type: string
+          example: G6534gda
+        photo:
+          type: string
+          example: ссылка на изображение
+        stringsCount:
+          type: number
+          example: 4
+        type:
+          type: string
+          example: электро
+        price:
+          type: number
+          example: 11000
+        description:
+          type: string
+          example: Описание карточки товара
+
+    guitar:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Наименование гитары
+        article:
+          type: string
+          example: G6534gda
+        photo:
+          type: string
+          example: ссылка на изображение
+        stringsCount:
+          type: number
+          example: 4
+        type:
+          type: string
+          example: электро
+        price:
+          type: number
+          example: 11000
+        description:
+          type: string
+          example: Описание карточки товара
+
+    authUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: qwerty123@mail.ru
+        password:
+          type: string
+          example: qwerty123
+
+    userToken:
+      type: object
+
+      properties:
+        token:
+          type: string
+          example: T2xpdmVyLmNvbm5lckBnbWFpbC5jb20=
+
+    createUser:
+      type: object
+
+      properties:
+        name:
+          type: string
+          example: Christina
+        email:
+          type: string
+          example: qwerty123@mail.ru
+        password:
+          type: string
+          example: qwerty123
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: строка-id
+        name:
+          type: string
+          example: Christina
+        email:
+          type: string
+          example: qwerty123@mail.ru
