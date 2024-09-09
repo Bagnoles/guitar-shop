@@ -36,7 +36,7 @@ npm run start:dev
 npm start
 ```
 
-**Переменные окружения** (для примера файл .env-example в корне проекта)
+**Переменные окружения** (для примера файл .env-example в корне проекта)   
 `DB_HOST, DB_USER, DB_PASSWORD, DB_PORT, DB_NAME` — настройки для подключения к MongoDB  
 `JWT_SECRET` — секрет для подписи токена  
 `SALT` — соль для хэширования паролей  

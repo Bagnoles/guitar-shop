@@ -36,6 +36,9 @@ export class GuitarService {
                 [sort]: +direction as SortDirection
             };
             return this.guitarModel.aggregate([
+                { $addFields: {
+                    id: { $toString: '$_id'}
+                } },
                 { $sort: sortObj },
                 { $limit: count }
             ]).exec();
