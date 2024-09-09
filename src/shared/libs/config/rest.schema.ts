@@ -11,6 +11,8 @@ export type RestSchema = {
   DB_PORT: number;
   DB_NAME: string;
   HOST: string;
+  JWT_SECRET: string;
+  SALT: string;
 }
 
 export const configRestSchema = convict<RestSchema>({
@@ -55,5 +57,17 @@ export const configRestSchema = convict<RestSchema>({
     format: String,
     env: 'HOST',
     default: 'localhost'
+  },
+  JWT_SECRET: {
+    doc: 'Secret for sign JWT',
+    format: String,
+    env: 'JWT_SECRET',
+    default: null
+  },
+  SALT: {
+    doc: 'Salt for password hash',
+    format: String,
+    env: 'SALT',
+    default: null
   },
 });

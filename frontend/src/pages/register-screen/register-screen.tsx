@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
+import { useAppDispatch } from '../../hooks/store-hooks';
+import { loginAction, registerAction } from '../../store/api-actions';
+import { useNavigate } from 'react-router-dom';
+import { AppRoutes } from '../../const';
 
 
 function RegisterScreen():JSX.Element {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleNameChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setName(evt.target.value);
@@ -22,8 +29,15 @@ function RegisterScreen():JSX.Element {
 
   const handleSubmitRegisterForm = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    console.log(name, email, password);
+    dispatch(registerAction({name, email, password}))
+      .then((response) => {
+        if (response.meta.requestStatus === 'fulfilled') {
+          dispatch(loginAction({email, password}));
+          navigate(AppRoutes.List);
+        }
+      })
   };
+
   return (
     <div className="wrapper">
       <Header />

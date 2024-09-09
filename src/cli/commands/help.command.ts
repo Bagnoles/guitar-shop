@@ -17,6 +17,8 @@ export class HelpCommand implements Command {
             ${CommandName.Help}:                                    # печатает этот текст
             ${CommandName.Generate} <n> <connection string>:        # заполняет базу данных (n - количество товаров, connection string — строка с параметрами для подключения к базе данных)
 
+            Также команда <generate> создает пользователя admin c email: admin@admin.ru и паролем 12345
+            
             Пример connection string:
             mongodb://[username]:[password]@[host]:[port]/[databaseName]?authSource=admin
     

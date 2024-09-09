@@ -13,5 +13,12 @@ export enum NameSpace {
 }
 
 export enum APIRoute {
-  Guitars = '/guitars'
+  Guitars = '/guitars',
+  Users = '/users'
+}
+
+export enum AuthorizationStatus {
+  Auth = 'AUTH',
+  NoAuth = 'NO_AUTH',
+  Unknown = 'UNKNOWN',
 }

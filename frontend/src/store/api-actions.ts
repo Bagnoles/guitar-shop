@@ -2,8 +2,9 @@ import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { State, store } from '.';
 import { APIRoute } from '../const';
-//import { dropToken, saveToken } from '../services/token';
+import { saveToken } from '../services/token';
 import { Guitar, CreateGuitarDto, UpdateGuitarDto } from '../types/guitar.type';
+import { CreateUserDto, LoginUserDto, UserInfo, UserToken } from '../types/user-info.type';
 
 const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: State;
@@ -39,9 +40,31 @@ export const updateGuitarInfo = createAppAsyncThunk<Guitar, UpdateGuitarDto>('gu
   }
 );
 
-export const deleteGuitar = createAppAsyncThunk<void, string>('guitars/deleteGuitar',
+export const deleteGuitar = createAppAsyncThunk<string, string>('guitars/deleteGuitar',
   async (id, {extra: api}) => {
-    const {data} = await api.delete<void>(`${APIRoute.Guitars}/${id}`);
+    await api.delete<string>(`${APIRoute.Guitars}/${id}`);
+    return id;
+  }
+);
+
+export const loginAction = createAppAsyncThunk<UserToken, LoginUserDto>('user/login',
+  async ({email, password}, {extra: api}) => {
+    const {data} = await api.post<UserToken>(`${APIRoute.Users}/login`, {email, password});
+    saveToken(data.token);
+    return data;
+  }
+);
+
+export const checkAuthStatus = createAppAsyncThunk<UserInfo, undefined>('user/checkAuthStatus',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<UserInfo>(`${APIRoute.Users}/check`);
+    return data;
+  }
+);
+
+export const registerAction = createAppAsyncThunk<UserInfo, CreateUserDto>('user/register',
+  async (dto, {extra: api}) => {
+    const {data} = await api.post<UserInfo>(`${APIRoute.Users}/register`, dto);
     return data;
   }
 );

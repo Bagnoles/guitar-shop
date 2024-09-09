@@ -85,8 +85,9 @@ export const guitarSlice = createSlice({
         state.guitars.isLoading = true;
         state.guitars.isError = false;
       })
-      .addCase(deleteGuitar.fulfilled, (state) => {
+      .addCase(deleteGuitar.fulfilled, (state, action) => {
         state.guitars.isLoading = false;
+        state.guitars.data = state.guitars.data.filter((item) => item.id !== action.payload);
       })
       .addCase(deleteGuitar.rejected, (state) => {
         state.guitars.isLoading = false;

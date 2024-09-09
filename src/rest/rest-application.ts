@@ -7,6 +7,7 @@ import { Config, RestSchema } from '../shared/libs/config/index.js';
 import { DatabaseClient } from '../shared/libs/database-client/index.js';
 import { getMongoURI, getFullServerPath } from '../shared/helpers/index.js';
 import { Controller } from '../shared/libs/rest/controller/index.js';
+import { ParseTokenMiddleware } from '../shared/libs/rest/middleware/parse-token.middleware.js';
 
 @injectable()
 export class RestApplication {
@@ -17,6 +18,7 @@ export class RestApplication {
         @inject(Component.Config) private readonly config: Config<RestSchema>,
         @inject(Component.DatabaseClient) private readonly databaseClient: DatabaseClient,
         @inject(Component.GuitarController) private readonly guitarController: Controller,
+        @inject(Component.UserController) private readonly userController: Controller,
     ) {}
 
     private initDb() {
@@ -38,11 +40,14 @@ export class RestApplication {
 
     private async initControllers() {
         this.server.use('/guitars', this.guitarController.router);
+        this.server.use('/users', this.userController.router);
         this.logger.info('Controller initialization completed');
     }
 
     private async initMiddlewares() {
+        const authenticateMiddleware = new ParseTokenMiddleware(this.config.get('JWT_SECRET'));
         this.server.use(express.json());
+        this.server.use(authenticateMiddleware.execute.bind(authenticateMiddleware));
         this.server.use(cors());
     }
 

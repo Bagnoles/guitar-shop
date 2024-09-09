@@ -1,60 +1,48 @@
 import { Link } from "react-router-dom";
 import Logo from "../logo/logo";
-import { AppRoutes } from "../../const";
+import { AppRoutes, AuthorizationStatus } from "../../const";
+import { useAppSelector } from "../../hooks/store-hooks";
+import { getAuthorizationStatus, getUserInfo } from "../../store/user/user-selectors";
 
 
 function Header():JSX.Element {
+  const authStatus = useAppSelector(getAuthorizationStatus);
+  const userInfo = useAppSelector(getUserInfo);
+
   return (
-    <header className="header" id="header">
-        <div className="container">
-          <div className="header__wrapper">
-            <Logo className="header"/>
-            <nav className="main-nav">
-              <ul className="main-nav__list">
-                <li className="main-nav__item"><Link className="link main-nav__link" to={AppRoutes.List}>Каталог</Link>
+    <header className={authStatus === AuthorizationStatus.Auth ? 'header--admin header' : 'header'} id="header">
+      <div className="container">
+        <div className="header__wrapper">
+          <Logo className="header"/>
+          <nav className="main-nav">
+            <ul className="main-nav__list">
+              <li className="main-nav__item"><Link className="link main-nav__link" to={AppRoutes.List}>Каталог</Link>
+              </li>
+              {authStatus === AuthorizationStatus.Auth ? <>
+                <li className="main-nav__item">
+                  <Link className="link main-nav__link" to={AppRoutes.List}>Список товаров</Link>
                 </li>
-                <li className="main-nav__item"><a className="link main-nav__link" href="#">Где купить?</a>
+              </> : <>
+                <li className="main-nav__item"><a className="link main-nav__link">Где купить?</a>
                 </li>
-                <li className="main-nav__item"><a className="link main-nav__link" href="#">О компании</a>
+                <li className="main-nav__item"><a className="link main-nav__link">О компании</a>
                 </li>
-              </ul>
-            </nav>
-            <div className="header__container">
-              <span className="header__user-name">Имя</span>
-              <a className="header__link" href="login.html" aria-label="Перейти в личный кабинет">
-                <svg className="header__link-icon" width="12" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-account"></use>
-                </svg>
-                <span className="header__link-text">Вход</span>
-              </a>
-            </div>
+              </>}
+            </ul>
+          </nav>
+          <div className="header__container">
+            <span className="header__user-name">{userInfo ? userInfo.name : 'Имя'}</span>
+            <Link className="header__link" to={AppRoutes.Main} aria-label="Перейти в личный кабинет">
+              <svg className="header__link-icon" width="12" height="14" aria-hidden="true">
+                <use xlinkHref="#icon-account"></use>
+              </svg>
+              <span className="header__link-text">Вход</span>
+            </Link>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
   )
 }
 
 export default Header;
-
-/*
-<header className="header--admin header" id="header">
-        <div className="container">
-          <div className="header__wrapper"><a className="header__logo logo" href="main.html"><img className="logo__img" width="70" height="70" src="./img/svg/logo.svg" alt="Логотип"></a>
-            <nav className="main-nav">
-              <ul className="main-nav__list">
-                <li className="main-nav__item"><a className="link main-nav__link" href="main">Каталог</a>
-                </li>
-                <li className="main-nav__item"><a className="link main-nav__link" href="#">Список товаров</a>
-                </li>
-              </ul>
-            </nav>
-            <div className="header__container"><span className="header__user-name">Имя</span><a className="header__link" href="login.html" aria-label="Перейти в личный кабинет">
-                <svg className="header__link-icon" width="12" height="14" aria-hidden="true">
-                  <use xlinkHref="#icon-account"></use>
-                </svg><span className="header__link-text">Вход</span></a></div>
-          </div>
-        </div>
-      </header>
-
-      */
-

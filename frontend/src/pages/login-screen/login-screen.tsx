@@ -1,13 +1,18 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Footer from "../../components/footer/footer";
 import Header from "../../components/header/header";
 import { AppRoutes } from '../../const';
 import { useState } from 'react';
+import { useAppDispatch } from '../../hooks/store-hooks';
+import { loginAction } from '../../store/api-actions';
 
 function LoginScreen():JSX.Element {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleEmailChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(evt.target.value);
@@ -19,7 +24,12 @@ function LoginScreen():JSX.Element {
 
   const handleSubmitLoginForm = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
-    console.log(email, password);
+    dispatch(loginAction({email, password}))
+      .then((response) => {
+        if (response.meta.requestStatus === 'fulfilled') {
+          navigate(AppRoutes.List);
+        }
+      });
   };
 
   return (
