@@ -5,6 +5,7 @@ import { APIRoute } from '../const';
 import { saveToken } from '../services/token';
 import { Guitar, CreateGuitarDto, UpdateGuitarDto } from '../types/guitar.type';
 import { CreateUserDto, LoginUserDto, UserInfo, UserToken } from '../types/user-info.type';
+import { RequestQuery } from '../types/request-query.type';
 
 const createAppAsyncThunk = createAsyncThunk.withTypes<{
   state: State;
@@ -12,8 +13,12 @@ const createAppAsyncThunk = createAsyncThunk.withTypes<{
   extra: AxiosInstance;
 }>();
 
-export const fetchGuitars = createAppAsyncThunk<Guitar[], undefined>('guitars/fetchGuitars',
-  async (_arg, {extra: api}) => {
+export const fetchGuitars = createAppAsyncThunk<Guitar[], RequestQuery | undefined>('guitars/fetchGuitars',
+  async (arg, {extra: api}) => {
+    if (arg) {
+      const {data} = await api.get<Guitar[]>(`${APIRoute.Guitars}?page=${arg.page}&sort=${arg.sort}&sortDirection=${arg.sortDirection}`);
+      return data;
+    }
     const {data} = await api.get<Guitar[]>(APIRoute.Guitars);
     return data;
   }
@@ -65,6 +70,13 @@ export const checkAuthStatus = createAppAsyncThunk<UserInfo, undefined>('user/ch
 export const registerAction = createAppAsyncThunk<UserInfo, CreateUserDto>('user/register',
   async (dto, {extra: api}) => {
     const {data} = await api.post<UserInfo>(`${APIRoute.Users}/register`, dto);
+    return data;
+  }
+);
+
+export const getTotalPages = createAppAsyncThunk<number, undefined>('guitars/getTotalPages',
+  async (_arg, {extra: api}) => {
+    const {data} = await api.get<number>(`${APIRoute.Guitars}/pages`);
     return data;
   }
 );

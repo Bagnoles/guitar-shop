@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { NameSpace } from '../../const';
 import { Guitar } from '../../types/guitar.type';
-import { fetchGuitars, getGuitarInfoByID, createGuitar, updateGuitarInfo, deleteGuitar } from '../api-actions';
+import { fetchGuitars, getGuitarInfoByID, createGuitar, updateGuitarInfo, deleteGuitar, getTotalPages } from '../api-actions';
 
 type GuitarInitialStateType = {
   guitars: {
     data: Guitar[];
     isLoading: boolean;
     isError: boolean;
+    pages: number;
   };
   guitarInfo: {
     data: Guitar | null;
@@ -22,7 +23,8 @@ const initialState: GuitarInitialStateType = {
   guitars: {
     data: [],
     isLoading: false,
-    isError: false
+    isError: false,
+    pages: 1
   },
   guitarInfo: {
     data: null,
@@ -92,6 +94,9 @@ export const guitarSlice = createSlice({
       .addCase(deleteGuitar.rejected, (state) => {
         state.guitars.isLoading = false;
         state.guitars.isError = true;
+      })
+      .addCase(getTotalPages.fulfilled, (state, action) => {
+        state.guitars.pages = action.payload;
       })
   },
 });

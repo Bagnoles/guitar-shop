@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import App from './components/app/app';
 import { store } from './store';
-import { checkAuthStatus, fetchGuitars } from './store/api-actions';
+import { checkAuthStatus, fetchGuitars, getTotalPages } from './store/api-actions';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,6 +14,7 @@ const root = ReactDOM.createRoot(
 
 store.dispatch(fetchGuitars());
 store.dispatch(checkAuthStatus());
+store.dispatch(getTotalPages());
 
 root.render(
   <React.StrictMode>

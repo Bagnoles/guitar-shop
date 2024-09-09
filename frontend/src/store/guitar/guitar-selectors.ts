@@ -10,3 +10,4 @@ export const getGuitarsInfoLoadingStatus = (state: Pick<State, NameSpace.Guitar>
 export const getGuitarsInfoErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].guitarInfo.isError;
 export const getGuitarsCreateErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].createError;
 export const getGuitarsUpdateErrorStatus = (state: Pick<State, NameSpace.Guitar>): boolean => state[NameSpace.Guitar].updateError;
+export const getPages = (state: Pick<State, NameSpace.Guitar>): number => state[NameSpace.Guitar].guitars.pages;

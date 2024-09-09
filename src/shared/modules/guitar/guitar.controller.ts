@@ -1,7 +1,7 @@
 import { injectable, inject } from 'inversify';
 import { Request, Response } from 'express';
 import { BaseController } from '../../libs/rest/controller/index.js';
-import { Component, HttpMethod } from '../../types/index.js';
+import { Component, HttpMethod, RequestQuery } from '../../types/index.js';
 import { CreateGuitarDto, GuitarRdo, GuitarService, UpdateGuitarDto } from './index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { fillDTO } from '../../helpers/index.js';
@@ -28,6 +28,11 @@ export class GuitarController extends BaseController {
                 new PrivateRouteMiddleware(), 
                 new ValidateDtoMiddleware(CreateGuitarDto)
             ]
+        });
+        this.addRoute({ 
+            path: '/pages', 
+            method: HttpMethod.Get, 
+            handler: this.getPages
         });
         this.addRoute({ 
             path: '/:guitarId', 
@@ -59,8 +64,8 @@ export class GuitarController extends BaseController {
         });
     }
 
-    public async index(_req: Request, res: Response): Promise<void> {
-        const guitars = await this.guitarService.findAll();
+    public async index(req: Request<unknown, unknown, unknown, RequestQuery>, res: Response): Promise<void> {
+        const guitars = await this.guitarService.findAll(req.query.limit, req.query.page, req.query.sort, req.query.sortDirection);
         this.ok(res, fillDTO(GuitarRdo, guitars));
     }
 
@@ -82,5 +87,10 @@ export class GuitarController extends BaseController {
     public async getInfo(req: Request, res: Response): Promise<void> {
         const result = await this.guitarService.findById(req.params.guitarId);
         this.ok(res, fillDTO(GuitarRdo, result));
+    }
+
+    public async getPages(_req: Request, res: Response): Promise<void> {
+        const result = await this.guitarService.getTotalPages();
+        this.ok(res, result);
     }
 }
