@@ -1,5 +1,7 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer';
+import { ValidationError } from 'class-validator';
 import * as crypto from 'node:crypto';
+import { ValidationErrorField } from '../libs/rest/errors/validation-error.js';
 
 export const generateRandomValue = (min: number, max: number): number => Math.floor(min + Math.random() * (max + 1 - min));
 
@@ -13,3 +15,9 @@ export const createSHA256 = (string: string, salt: string): string => crypto.cre
   .update(string)
   .update(crypto.createHash('sha256').update(salt).digest('hex'))
   .digest('hex');
+
+export const reduceValidationErrors = (errors: ValidationError[]): ValidationErrorField[] => errors.map(({property, value, constraints}) => ({
+  property,
+  value,
+  messages: constraints ? Object.values(constraints) : []
+}));

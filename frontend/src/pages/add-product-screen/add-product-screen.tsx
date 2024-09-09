@@ -8,12 +8,13 @@ import { useAppDispatch, useAppSelector } from '../../hooks/store-hooks';
 import { createGuitar } from '../../store/api-actions';
 import { toast } from 'react-toastify';
 import { getGuitarsCreateErrorStatus } from '../../store/guitar/guitar-selectors';
+import { editTime } from '../../utils';
 
 
 function AddProductScreen():JSX.Element {
   const [name, setName] = useState('');
   const [price, setPrice] = useState(0);
-  const [type, setType] = useState(GuitarTypes.Acustic);
+  const [type, setType] = useState(GuitarTypes.Electro);
   const [stringsCount, setStringsCount] = useState(4);
   const [article, setArticle] = useState('');
   const [description, setDescription] = useState('');
@@ -102,20 +103,52 @@ function AddProductScreen():JSX.Element {
                   <label htmlFor="ukulele">Укулеле</label>
                 </div>
                 <div className="input-radio add-item__form-radio"><span>Количество струн</span>
-                  <input type="radio" id="string-qty-4" name="string-qty" value="4" checked={stringsCount === 4} onChange={handleStringsCountChange} />
+                  <input
+                    type="radio"
+                    id="string-qty-4"
+                    name="string-qty"
+                    value="4"
+                    checked={stringsCount === 4}
+                    onChange={handleStringsCountChange}
+                    disabled={type === GuitarTypes.Acustic}
+                  />
                   <label htmlFor="string-qty-4">4</label>
-                  <input type="radio" id="string-qty-6" name="string-qty" value="6" checked={stringsCount === 6} onChange={handleStringsCountChange} />
+                  <input
+                    type="radio"
+                    id="string-qty-6"
+                    name="string-qty"
+                    value="6"
+                    checked={stringsCount === 6}
+                    onChange={handleStringsCountChange}
+                    disabled={type === GuitarTypes.Ukulele}
+                  />
                   <label htmlFor="string-qty-6">6</label>
-                  <input type="radio" id="string-qty-7" name="string-qty" value="7" checked={stringsCount === 7} onChange={handleStringsCountChange} />
+                  <input
+                    type="radio"
+                    id="string-qty-7"
+                    name="string-qty"
+                    value="7"
+                    checked={stringsCount === 7}
+                    onChange={handleStringsCountChange}
+                    disabled={type === GuitarTypes.Ukulele}
+                  />
                   <label htmlFor="string-qty-7">7</label>
-                  <input type="radio" id="string-qty-12" name="string-qty" value="12" checked={stringsCount === 12} onChange={handleStringsCountChange} />
+                  <input
+                    type="radio"
+                    id="string-qty-12"
+                    name="string-qty"
+                    value="12"
+                    checked={stringsCount === 12}
+                    onChange={handleStringsCountChange}
+                    disabled={type === GuitarTypes.Ukulele || type === GuitarTypes.Electro}
+                  />
                   <label htmlFor="string-qty-12">12</label>
                 </div>
               </div>
               <div className="add-item__form-right">
                 <div className="custom-input add-item__form-input">
                   <label><span>Дата добавления товара</span>
-                    <input type="text" name="date" value={new Date().toDateString()} placeholder="Дата в формате 00.00.0000" readOnly />
+                    <input type="text" name="date" value={editTime(new Date().toISOString())} placeholder="Дата в формате 00.00.0000" readOnly />
                   </label>
                   <p>Заполните поле</p>
                 </div>

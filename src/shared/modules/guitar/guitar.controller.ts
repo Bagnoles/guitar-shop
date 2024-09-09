@@ -5,6 +5,7 @@ import { Component, HttpMethod } from '../../types/index.js';
 import { CreateGuitarDto, GuitarRdo, GuitarService, UpdateGuitarDto } from './index.js';
 import { Logger } from '../../libs/logger/index.js';
 import { fillDTO } from '../../helpers/index.js';
+import { PrivateRouteMiddleware, ValidateDtoMiddleware, ValidateObjectIdMiddleware } from '../../libs/rest/middleware/index.js';
 
 @injectable()
 export class GuitarController extends BaseController {
@@ -13,11 +14,49 @@ export class GuitarController extends BaseController {
         @inject(Component.GuitarService) private readonly guitarService: GuitarService
     ) {
         super(logger);
-        this.addRoute({ path: '/', method: HttpMethod.Get, handler: this.index });
-        this.addRoute({ path: '/', method: HttpMethod.Post, handler: this.create });
-        this.addRoute({ path: '/:guitarId', method: HttpMethod.Patch, handler: this.update });
-        this.addRoute({ path: '/:guitarId', method: HttpMethod.Delete, handler: this.delete });
-        this.addRoute({ path: '/:guitarId', method: HttpMethod.Get, handler: this.getInfo });
+        this.addRoute({ 
+            path: '/', 
+            method: HttpMethod.Get, 
+            handler: this.index,
+            middlewares: [new PrivateRouteMiddleware()]
+        });
+        this.addRoute({ 
+            path: '/', 
+            method: HttpMethod.Post, 
+            handler: this.create,
+            middlewares: [
+                new PrivateRouteMiddleware(), 
+                new ValidateDtoMiddleware(CreateGuitarDto)
+            ]
+        });
+        this.addRoute({ 
+            path: '/:guitarId', 
+            method: HttpMethod.Patch, 
+            handler: this.update,
+            middlewares: [
+                new PrivateRouteMiddleware(),
+                new ValidateObjectIdMiddleware('guitarId'), 
+                new ValidateDtoMiddleware(UpdateGuitarDto)
+            ]
+        });
+        this.addRoute({ 
+            path: '/:guitarId', 
+            method: HttpMethod.Delete, 
+            handler: this.delete,
+            middlewares: [
+                new PrivateRouteMiddleware(),
+                new ValidateObjectIdMiddleware('guitarId')
+            ]
+        });
+        this.addRoute({ 
+            path: '/:guitarId', 
+            method: HttpMethod.Get, 
+            handler: this.getInfo,
+            middlewares: [
+                new PrivateRouteMiddleware(),
+                new ValidateObjectIdMiddleware('guitarId')
+            ]
+        });
     }
 
     public async index(_req: Request, res: Response): Promise<void> {

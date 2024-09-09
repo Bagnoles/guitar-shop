@@ -9,6 +9,7 @@ import { HttpError } from '../../libs/rest/errors/index.js';
 import { StatusCodes } from 'http-status-codes';
 import { AuthService } from '../auth/index.js';
 import { Config, RestSchema } from '../../libs/config/index.js';
+import { ValidateDtoMiddleware } from '../../libs/rest/middleware/index.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -28,12 +29,14 @@ export class UserController extends BaseController {
     this.addRoute({
       path: '/login',
       method: HttpMethod.Post,
-      handler: this.login
+      handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)]
     });
     this.addRoute({
       path: '/register',
       method: HttpMethod.Post,
-      handler: this.register
+      handler: this.register,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)]
     });
   }
 
